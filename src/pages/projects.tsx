@@ -1,7 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type JSX } from "react";
 import { Box, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { COLORS } from "../theme";
+import PaperRow from "../components/papers";       // runtime component
+import type { Paper } from "../components/papers"; // type-only import
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -14,23 +16,29 @@ interface Star {
   subsectionId?: string;
 }
 
+interface Subsection {
+  id: string;
+  title: string;
+  body: (string | JSX.Element)[];
+}
+
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const STARS: Star[] = [
-  { id: "a", x: 180, y:  72, label: "A", size: 18 },
-  { id: "b", x: 252, y:  54, label: "B", size: 18, subsectionId: "belt"   },
-  { id: "c", x: 144, y: 198, label: "C", size: 18 },
-  { id: "d", x: 171, y: 189, label: "D", size: 18 },
+  { id: "a", x: 180, y:  72, label: "A", size: 18, subsectionId: "paper"   },
+  { id: "b", x: 252, y:  54, label: "B", size: 18, subsectionId: "about"   },
+  { id: "c", x: 144, y: 198, label: "C", size: 18, subsectionId: "distributed"    },
+  { id: "d", x: 171, y: 189, label: "D", size: 18, subsectionId: "plan9"    },
   { id: "f", x: 198, y: 306, label: "F", size: 18 },
-  { id: "g", x: 252, y: 360, label: "G", size: 45, subsectionId: "nebula" },
+  { id: "g", x: 252, y: 360, label: "G", size: 45, subsectionId: "code" },
   { id: "h", x: 360, y: 306, label: "H", size: 27 },
-  { id: "i", x: 450, y: 378, label: "I", size: 36, subsectionId: "stars"  },
+  { id: "i", x: 450, y: 378, label: "I", size: 36 },
   { id: "j", x: 666, y: 369, label: "J", size: 27 },
   { id: "k", x: 324, y: 612, label: "K", size: 36 },
   { id: "l", x: 360, y: 594, label: "L", size: 36 },
   { id: "m", x: 396, y: 567, label: "M", size: 36 },
   { id: "n", x: 279, y: 756, label: "N", size: 27 },
-  { id: "o", x: 486, y: 729, label: "O", size: 45, subsectionId: "origin" },
+  { id: "o", x: 486, y: 729, label: "O", size: 45 },
   { id: "p", x: 657, y: 315, label: "P", size: 18 },
   { id: "q", x: 630, y: 279, label: "Q", size: 18 },
   { id: "r", x: 657, y: 405, label: "R", size: 18 },
@@ -49,16 +57,39 @@ const LINES: [number, number, number, number][] = [
   [666, 369, 657, 315], [657, 315, 630, 279],
 ];
 
-const ORION_SUBSECTIONS = [
+const ORION_PAPERS: Paper[] = [
   {
-    id: "belt", title: "The Belt",
+    id: "orion-paper",
+    title: "Orion",
+    description: "Click View to read the research paper inline.",
+    pdfPath: "/Orion.pdf",
+  },
+];
+
+const ORION_SUBSECTIONS: Subsection[] = [
+  {
+    id: "about", title: "About",
     body: [
       "Alnitak, Alnilam, and Mintaka form the unmistakable three-star belt that has guided sailors and travellers for millennia. They sit roughly 800 to 1,300 light-years from Earth, yet appear almost identical in brightness from our vantage point.",
       "The alignment is a coincidence of perspective — in three-dimensional space the three stars are nowhere near each other. Alnilam, the middle star, is the most luminous of the trio, radiating roughly 375,000 times the energy of our Sun.",
     ],
   },
   {
-    id: "nebula", title: "The Great Nebula",
+    id: "paper", title: "Research Paper",
+    body: [
+        <PaperRow
+        key="orion-paper"
+        paper={{
+            id: "orion-paper",
+            title: "Orion",
+            description: "Click View to read the research paper inline.",
+            pdfPath: "/Orion.pdf",
+        }}
+        />,
+    ]
+  },
+  {
+    id: "plan9", title: "Plan 9",
     body: [
       "Visible to the naked eye as a fuzzy patch below the belt, M42 is a stellar nursery roughly 1,344 light-years away and over 24 light-years across. It is one of the most scrutinised objects in the night sky.",
       "Within its glowing clouds, protostars are collapsing under gravity and igniting nuclear fusion for the very first time. The Trapezium cluster at its heart provides the ultraviolet radiation that excites the surrounding hydrogen gas into a luminous pink and violet haze.",
@@ -66,7 +97,7 @@ const ORION_SUBSECTIONS = [
     ],
   },
   {
-    id: "stars", title: "Betelgeuse & Rigel",
+    id: "distributed", title: "Distributed Systems",
     body: [
       "Betelgeuse marks Orion's right shoulder and is one of the largest stars visible to the naked eye — a red supergiant so enormous that if placed at the centre of our Solar System, its surface would extend beyond the orbit of Jupiter.",
       "Rigel anchors the opposite corner as a blue-white supergiant shining approximately 120,000 times brighter than the Sun. The contrast between their colours — deep amber versus icy blue — is striking even without optical aids.",
@@ -74,7 +105,7 @@ const ORION_SUBSECTIONS = [
     ],
   },
   {
-    id: "origin", title: "Origin of the Myth",
+    id: "code", title: "Code",
     body: [
       "The Orion myth predates the Greeks. Mesopotamian astronomers recognised the same asterism as the great hero Gilgamesh, hunter of the bull of heaven, thousands of years before Homer or Hesiod set anything to parchment.",
       "In Egyptian tradition the stars aligned with Osiris, god of the afterlife, and the three belt stars influenced the placement of the Giza pyramids — a claim that remains debated but captures the imagination regardless.",

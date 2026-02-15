@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Box, Collapse, Typography, Link as MuiLink } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon   from "@mui/icons-material/KeyboardArrowUp";
-import ArticleOutlinedIcon   from "@mui/icons-material/ArticleOutlined";
+import { Box, Typography, Link as MuiLink } from "@mui/material";
+import PaperRow from "../components/papers";       // runtime component
+import type { Paper } from "../components/papers"; // type-only import
 import { COLORS } from "../theme";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -15,18 +13,11 @@ interface Project {
   anchor:      string;
 }
 
-interface Paper {
-  id:          string;
-  title:       string;
-  description: string;
-  pdfPath:     string;
-}
-
 const PROJECTS: Project[] = [
   {
     id:          "orion",
     title:       "Orion",
-    description: "An interactive star-map explorer mapping constellation data to scrollable narrative sections.",
+    description: "A minimal distributed operating system based on Plan 9 Philosiphies",
     anchor:      "orion",
   },
   {
@@ -39,17 +30,12 @@ const PROJECTS: Project[] = [
 
 const PAPERS: Paper[] = [
   {
-    id:          "orion-paper",
-    title:       "Orion",
+    id: "orion-paper",
+    title: "Orion",
     description: "Replace with the actual abstract or a brief summary of this paper's findings and contribution.",
-    pdfPath:     "/Orion.pdf",
+    pdfPath: "/Orion.pdf",
   },
-  {
-    id:          "paper2",
-    title:       "Paper Title Two",
-    description: "Replace with the actual abstract or a brief summary of this paper's findings and contribution.",
-    pdfPath:     "/papers/paper2.pdf",
-  },
+  // Add more Paper objects here if needed
 ];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -68,115 +54,6 @@ function SectionDivider() {
         }}
       />
       <Box sx={{ flex: 1, height: "1px", backgroundColor: COLORS.border }} />
-    </Box>
-  );
-}
-
-function PaperRow({ paper }: { paper: Paper }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Box sx={{ mb: 4 }}>
-      {/* Header row */}
-      <Box
-        sx={{
-          display:        "flex",
-          alignItems:     "flex-start",
-          justifyContent: "space-between",
-          gap:            { xs: 1.5, md: 3 },
-          borderLeft:     `2px solid ${COLORS.border}`,
-          pl:             2.5,
-          py:             0.5,
-          transition:     "border-color 0.2s",
-          "&:hover":      { borderLeftColor: COLORS.gold },
-        }}
-      >
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}>
-            <ArticleOutlinedIcon sx={{ fontSize: "0.9rem", color: COLORS.textMuted, flexShrink: 0 }} />
-            <Typography
-              sx={{
-                fontFamily:    '"Georgia", serif',
-                fontSize:      { xs: "0.85rem", md: "0.9rem" },
-                letterSpacing: "0.06em",
-                color:         COLORS.textPrimary,
-              }}
-            >
-              {paper.title}
-            </Typography>
-          </Box>
-          <Typography
-            sx={{
-              fontSize:   { xs: "0.8rem", md: "0.83rem" },
-              color:      COLORS.textMuted,
-              lineHeight: 1.7,
-            }}
-          >
-            {paper.description}
-          </Typography>
-        </Box>
-
-        {/* View / close button */}
-        <Box
-          component="button"
-          onClick={() => setOpen((o) => !o)}
-          aria-expanded={open}
-          aria-label={open ? "Collapse PDF" : "View PDF"}
-          sx={{
-            display:       "flex",
-            alignItems:    "center",
-            gap:           0.5,
-            mt:            0.25,
-            flexShrink:    0,
-            background:    "none",
-            border:        `1px solid ${open ? COLORS.gold : COLORS.border}`,
-            borderRadius:  "2px",
-            color:         open ? COLORS.gold : COLORS.textMuted,
-            cursor:        "pointer",
-            px:            { xs: 1, md: 1.5 },
-            py:            { xs: 0.5, md: 0.7 },
-            fontSize:      "0.72rem",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            fontFamily:    '"Georgia", serif',
-            transition:    "border-color 0.2s, color 0.2s",
-            // Ensure finger-friendly on touch
-            minHeight:     "36px",
-            "&:hover":     { color: COLORS.gold, borderColor: COLORS.gold },
-          }}
-        >
-          {open
-            ? <><span>Close</span><KeyboardArrowUpIcon sx={{ fontSize: "0.9rem" }} /></>
-            : <><span>View</span><KeyboardArrowDownIcon sx={{ fontSize: "0.9rem" }} /></>
-          }
-        </Box>
-      </Box>
-
-      {/* Collapsible A4 PDF panel */}
-      <Collapse in={open} timeout={300}>
-        <Box
-          sx={{
-            mt:           1.5,
-            // On mobile remove the left offset so PDF fills full section width
-            ml:           { xs: 0, md: 2.5 },
-            border:       `1px solid ${COLORS.border}`,
-            borderRadius: "2px",
-            overflow:     "hidden",
-            // A4 portrait ratio (210mm × 297mm = 0.7071 width:height)
-            // width is 100% of the containing column, height computed by ratio
-            width:        "100%",
-            aspectRatio:  "210 / 297",
-          }}
-        >
-          <iframe
-            src={paper.pdfPath}
-            title={paper.title}
-            width="100%"
-            height="100%"
-            style={{ border: 0, display: "block" }}
-          />
-        </Box>
-      </Collapse>
     </Box>
   );
 }

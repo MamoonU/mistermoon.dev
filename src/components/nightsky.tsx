@@ -43,7 +43,7 @@ function makeStaticStar(width: number, height: number): StaticStar {
     y:        Math.random() * height,
     size:     Math.random() * 1 + 0.5,
     alpha:    0,
-    delta:    0.003 + Math.random() * 0.002,
+    delta:    0.3 + Math.random() * 0.2,
     holdTime: 20 + Math.floor(Math.random() * 40),
     state:    "fadingIn",
   };
@@ -54,7 +54,7 @@ function resetStaticStar(star: StaticStar, width: number, height: number): void 
   star.y        = Math.random() * height;
   star.size     = Math.random() * 1 + 0.5;
   star.alpha    = 0;
-  star.delta    = 0.003 + Math.random() * 0.002;
+  star.delta    = 0.003 + Math.random() * 0.02;
   star.holdTime = 20 + Math.floor(Math.random() * 40);
   star.state    = "fadingIn";
 }
@@ -161,7 +161,7 @@ function tickShootingStar(
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const STATIC_COUNT  = 400;
+const STATIC_COUNT  = 700;
 const SPAWN_CHANCE  = 0.004; // probability per frame of a new shooting star
 const BG_COLOR      = "rgb(8, 8, 14)";
 
