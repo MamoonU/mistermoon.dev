@@ -222,8 +222,15 @@ export default function Projects() {
   }, []);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  const scrollToSubsection = (id: string) =>
-    subsectionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const TOP_OFFSET = 125;
+
+    const scrollToSubsection = (id: string) => {
+    const el = subsectionRefs.current[id];
+    if (!el) return;
+
+    const y = el.getBoundingClientRect().top + window.scrollY - TOP_OFFSET;
+    window.scrollTo({ top: y, behavior: "smooth" });
+    };
 
   const subsectionTitle = (subId: string) =>
     ORION_SUBSECTIONS.find((s) => s.id === subId)?.title;
@@ -371,7 +378,7 @@ export default function Projects() {
             sx={{
               // Mobile: natural height constrained to fit screen
               // Desktop: full viewport height, absolutely positioned
-              height:   { xs: "min(55vh, 90vw)", md: "100vh" },
+              height:   { xs: "min(55vh, 90vw)", md: "calc(100vh - 100px)" },
               position: { xs: "relative", md: "absolute" },
               top:      { xs: "auto", md: 0 },
               left:     { xs: "auto", md: 0 },
