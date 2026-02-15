@@ -1,26 +1,25 @@
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Box, Divider, Collapse, Typography, Link as MuiLink } from "@mui/material";
+import { Box, Collapse, Typography, Link as MuiLink } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon   from "@mui/icons-material/KeyboardArrowUp";
 import ArticleOutlinedIcon   from "@mui/icons-material/ArticleOutlined";
 import { COLORS } from "../theme";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-// Replace these with real content when ready.
 
 interface Project {
   id:          string;
   title:       string;
   description: string;
-  anchor:      string; // hash on /projects page  e.g. "orion" or "project2"
+  anchor:      string;
 }
 
 interface Paper {
   id:          string;
   title:       string;
   description: string;
-  pdfPath:     string; // path relative to /public, e.g. "/papers/my-paper.pdf"
+  pdfPath:     string;
 }
 
 const PROJECTS: Project[] = [
@@ -40,15 +39,15 @@ const PROJECTS: Project[] = [
 
 const PAPERS: Paper[] = [
   {
-    id:          "paper1",
-    title:       "Paper Title One",
-    description: "Replace with the actual abstract or a brief summary of the paper's findings and contribution.",
-    pdfPath:     "/papers/paper1.pdf",
+    id:          "orion-paper",
+    title:       "Orion",
+    description: "Replace with the actual abstract or a brief summary of this paper's findings and contribution.",
+    pdfPath:     "/Orion.pdf",
   },
   {
     id:          "paper2",
     title:       "Paper Title Two",
-    description: "Replace with the actual abstract or a brief summary of the paper's findings and contribution.",
+    description: "Replace with the actual abstract or a brief summary of this paper's findings and contribution.",
     pdfPath:     "/papers/paper2.pdf",
   },
 ];
@@ -57,15 +56,15 @@ const PAPERS: Paper[] = [
 
 function SectionDivider() {
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 2, my: 6 }}>
+    <Box sx={{ display: "flex", alignItems: "center", gap: 2, my: 7 }}>
       <Box sx={{ flex: 1, height: "1px", backgroundColor: COLORS.border }} />
       <Box
         sx={{
-          width:           6,
-          height:          6,
+          width:           5,
+          height:          5,
           borderRadius:    "50%",
           backgroundColor: COLORS.gold,
-          opacity:         0.4,
+          opacity:         0.35,
         }}
       />
       <Box sx={{ flex: 1, height: "1px", backgroundColor: COLORS.border }} />
@@ -73,11 +72,7 @@ function SectionDivider() {
   );
 }
 
-interface PaperRowProps {
-  paper: Paper;
-}
-
-function PaperRow({ paper }: PaperRowProps) {
+function PaperRow({ paper }: { paper: Paper }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -85,26 +80,24 @@ function PaperRow({ paper }: PaperRowProps) {
       {/* Header row */}
       <Box
         sx={{
-          display:       "flex",
-          alignItems:    "flex-start",
-          justifyContent:"space-between",
-          gap:           3,
-          borderLeft:    `2px solid ${COLORS.border}`,
-          pl:            2.5,
-          py:            0.5,
-          transition:    "border-color 0.2s",
-          "&:hover":     { borderLeftColor: COLORS.gold },
+          display:        "flex",
+          alignItems:     "flex-start",
+          justifyContent: "space-between",
+          gap:            { xs: 1.5, md: 3 },
+          borderLeft:     `2px solid ${COLORS.border}`,
+          pl:             2.5,
+          py:             0.5,
+          transition:     "border-color 0.2s",
+          "&:hover":      { borderLeftColor: COLORS.gold },
         }}
       >
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}>
-            <ArticleOutlinedIcon
-              sx={{ fontSize: "0.85rem", color: COLORS.textMuted }}
-            />
+            <ArticleOutlinedIcon sx={{ fontSize: "0.9rem", color: COLORS.textMuted, flexShrink: 0 }} />
             <Typography
               sx={{
                 fontFamily:    '"Georgia", serif',
-                fontSize:      "0.88rem",
+                fontSize:      { xs: "0.85rem", md: "0.9rem" },
                 letterSpacing: "0.06em",
                 color:         COLORS.textPrimary,
               }}
@@ -114,7 +107,7 @@ function PaperRow({ paper }: PaperRowProps) {
           </Box>
           <Typography
             sx={{
-              fontSize:   "0.83rem",
+              fontSize:   { xs: "0.8rem", md: "0.83rem" },
               color:      COLORS.textMuted,
               lineHeight: 1.7,
             }}
@@ -123,55 +116,56 @@ function PaperRow({ paper }: PaperRowProps) {
           </Typography>
         </Box>
 
-        {/* Expand / collapse button */}
+        {/* View / close button */}
         <Box
           component="button"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-label={open ? "Collapse PDF" : "View PDF"}
           sx={{
-            display:         "flex",
-            alignItems:      "center",
-            gap:             0.5,
-            mt:              0.25,
-            flexShrink:      0,
-            background:      "none",
-            border:          `1px solid ${open ? COLORS.gold : COLORS.border}`,
-            borderRadius:    "2px",
-            color:           open ? COLORS.gold : COLORS.textMuted,
-            cursor:          "pointer",
-            px:              1.5,
-            py:              0.6,
-            fontSize:        "0.72rem",
-            letterSpacing:   "0.1em",
-            textTransform:   "uppercase",
-            fontFamily:      '"Georgia", serif',
-            transition:      "border-color 0.2s, color 0.2s",
-            "&:hover":       { color: COLORS.gold, borderColor: COLORS.gold },
+            display:       "flex",
+            alignItems:    "center",
+            gap:           0.5,
+            mt:            0.25,
+            flexShrink:    0,
+            background:    "none",
+            border:        `1px solid ${open ? COLORS.gold : COLORS.border}`,
+            borderRadius:  "2px",
+            color:         open ? COLORS.gold : COLORS.textMuted,
+            cursor:        "pointer",
+            px:            { xs: 1, md: 1.5 },
+            py:            { xs: 0.5, md: 0.7 },
+            fontSize:      "0.72rem",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            fontFamily:    '"Georgia", serif',
+            transition:    "border-color 0.2s, color 0.2s",
+            // Ensure finger-friendly on touch
+            minHeight:     "36px",
+            "&:hover":     { color: COLORS.gold, borderColor: COLORS.gold },
           }}
         >
-          {open ? (
-            <>
-              Close <KeyboardArrowUpIcon sx={{ fontSize: "0.85rem" }} />
-            </>
-          ) : (
-            <>
-              View <KeyboardArrowDownIcon sx={{ fontSize: "0.85rem" }} />
-            </>
-          )}
+          {open
+            ? <><span>Close</span><KeyboardArrowUpIcon sx={{ fontSize: "0.9rem" }} /></>
+            : <><span>View</span><KeyboardArrowDownIcon sx={{ fontSize: "0.9rem" }} /></>
+          }
         </Box>
       </Box>
 
-      {/* Collapsible PDF panel */}
+      {/* Collapsible A4 PDF panel */}
       <Collapse in={open} timeout={300}>
         <Box
           sx={{
             mt:           1.5,
-            ml:           2.5,
+            // On mobile remove the left offset so PDF fills full section width
+            ml:           { xs: 0, md: 2.5 },
             border:       `1px solid ${COLORS.border}`,
             borderRadius: "2px",
             overflow:     "hidden",
-            height:       "68vh",
+            // A4 portrait ratio (210mm × 297mm = 0.7071 width:height)
+            // width is 100% of the containing column, height computed by ratio
+            width:        "100%",
+            aspectRatio:  "210 / 297",
           }}
         >
           <iframe
@@ -193,14 +187,15 @@ export default function Home() {
   return (
     <Box
       sx={{
-        maxWidth: "780px",
+        // Wider section — aligns with A4 PDF width at standard screen DPI
+        maxWidth: "960px",
         mx:       "auto",
-        px:       { xs: 3, md: 6 },
+        px:       { xs: 3, sm: 4, md: 6 },
         py:       { xs: 6, md: 10 },
         color:    COLORS.textPrimary,
       }}
     >
-      {/* ── Projects ────────────────────────────────────────────────────── */}
+      {/* ── Projects ──────────────────────────────────────────────────────── */}
       <Box sx={{ mb: 1 }}>
         <MuiLink
           component={RouterLink}
@@ -208,13 +203,12 @@ export default function Home() {
           underline="none"
           sx={{
             fontFamily:    '"Georgia", serif',
-            fontSize:      "clamp(1.6rem, 3vw, 2.2rem)",
+            fontSize:      { xs: "1.4rem", sm: "1.7rem", md: "clamp(1.6rem, 3vw, 2.2rem)" },
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             color:         COLORS.white,
             display:       "inline-block",
             position:      "relative",
-            // underline bar that grows on hover
             "&::after": {
               content:         '""',
               position:        "absolute",
@@ -233,11 +227,10 @@ export default function Home() {
         </MuiLink>
       </Box>
 
-      <Typography variant="caption" sx={{ display: "block", mb: 5 }}>
+      <Typography variant="caption" sx={{ display: "block", mb: { xs: 3, md: 5 } }}>
         Click a title to explore that project
       </Typography>
 
-      {/* Project list */}
       <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
         {PROJECTS.map((project) => (
           <Box
@@ -245,27 +238,31 @@ export default function Home() {
             component="li"
             sx={{
               display:    "flex",
-              alignItems: "baseline",
-              gap:        { xs: 1.5, md: 2.5 },
-              mb:         3,
-              // Left accent line
+              // Stack on xs, row on sm+
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "flex-start", sm: "baseline" },
+              gap:        { xs: 0.5, sm: 2.5 },
+              mb:         { xs: 2.5, md: 3 },
               borderLeft: `2px solid ${COLORS.border}`,
               pl:         2.5,
               transition: "border-color 0.2s",
               "&:hover":  { borderLeftColor: COLORS.gold },
             }}
           >
-            {/* Title as anchor-linked navigation */}
             <MuiLink
               component={RouterLink}
               to={`/projects#${project.anchor}`}
               underline="none"
               sx={{
                 fontFamily:    '"Georgia", serif',
-                fontSize:      "0.88rem",
+                fontSize:      { xs: "0.92rem", md: "0.9rem" },
                 letterSpacing: "0.07em",
                 color:         COLORS.gold,
                 flexShrink:    0,
+                // Touch-friendly min height
+                minHeight:     "28px",
+                display:       "flex",
+                alignItems:    "center",
                 "&:hover":     { opacity: 0.7 },
                 transition:    "opacity 0.2s",
               }}
@@ -273,7 +270,7 @@ export default function Home() {
               {project.title}
             </MuiLink>
 
-            {/* Dot separator */}
+            {/* Dot separator — hidden on xs where layout is column */}
             <Box
               aria-hidden
               sx={{
@@ -287,14 +284,7 @@ export default function Home() {
               }}
             />
 
-            {/* Description */}
-            <Typography
-              sx={{
-                fontSize:   "0.85rem",
-                color:      COLORS.textMuted,
-                lineHeight: 1.7,
-              }}
-            >
+            <Typography sx={{ fontSize: { xs: "0.82rem", md: "0.85rem" }, color: COLORS.textMuted, lineHeight: 1.7 }}>
               {project.description}
             </Typography>
           </Box>
@@ -303,13 +293,13 @@ export default function Home() {
 
       <SectionDivider />
 
-      {/* ── Papers ──────────────────────────────────────────────────────── */}
+      {/* ── Papers ────────────────────────────────────────────────────────── */}
       <Box sx={{ mb: 1 }}>
         <Typography
           component="h2"
           sx={{
             fontFamily:    '"Georgia", serif',
-            fontSize:      "clamp(1.6rem, 3vw, 2.2rem)",
+            fontSize:      { xs: "1.4rem", sm: "1.7rem", md: "clamp(1.6rem, 3vw, 2.2rem)" },
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             color:         COLORS.white,
@@ -319,7 +309,7 @@ export default function Home() {
         </Typography>
       </Box>
 
-      <Typography variant="caption" sx={{ display: "block", mb: 5 }}>
+      <Typography variant="caption" sx={{ display: "block", mb: { xs: 3, md: 5 } }}>
         Click View to read inline
       </Typography>
 

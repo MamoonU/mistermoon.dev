@@ -34,9 +34,21 @@ const NAV_PAGES = [
 ] as const;
 
 const SOCIAL_LINKS = [
-  { icon: <GitHubIcon fontSize="small" />,    href: "https://github.com/MamoonU",                           label: "GitHub"    },
-  { icon: <LinkedInIcon fontSize="small" />,  href: "https://www.linkedin.com/in/mamoon-umar-92ba95297/",   label: "LinkedIn"  },
-  { icon: <InstagramIcon fontSize="small" />, href: "https://www.instagram.com/mamoon.umar",                label: "Instagram" },
+  {
+    icon:  <GitHubIcon sx={{ fontSize: { xs: "1.4rem", md: "2.35rem" } }} />,
+    href:  "https://github.com/MamoonU",
+    label: "GitHub",
+  },
+  {
+    icon:  <LinkedInIcon sx={{ fontSize: { xs: "1.4rem", md: "2.35rem" } }} />,
+    href:  "https://www.linkedin.com/in/mamoon-umar-92ba95297/",
+    label: "LinkedIn",
+  },
+  {
+    icon:  <InstagramIcon sx={{ fontSize: { xs: "1.4rem", md: "2.35rem" } }} />,
+    href:  "https://www.instagram.com/mamoon.umar",
+    label: "Instagram",
+  },
 ] as const;
 
 export default function Layout({ children }: LayoutProps) {
@@ -45,7 +57,7 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <>
-      {/* ── Background canvas ─────────────────────────────────────────────── */}
+      {/* ── Background ────────────────────────────────────────────────────── */}
       <NightSky />
 
       {/* ── App bar ───────────────────────────────────────────────────────── */}
@@ -53,43 +65,44 @@ export default function Layout({ children }: LayoutProps) {
         position="sticky"
         elevation={0}
         sx={{
-          height:         "72px",
-          justifyContent: "center",
-          backgroundColor:"transparent",
-          backdropFilter: "blur(6px)",
-          borderBottom:   `1px solid ${COLORS.border}`,
-          // Override the theme's appbar background which is transparent anyway
+          height:          { xs: "64px", md: "100px" },
+          justifyContent:  "center",
+          backgroundColor: "transparent",
+          backdropFilter:  "blur(6px)",
+          borderBottom:    `1px solid ${COLORS.border}`,
         }}
       >
-        {/* Aurora decorative layer sits behind toolbar content */}
+        {/* Aurora decorative layer */}
         <AuroraBar />
 
         <Toolbar
           sx={{
             position:       "relative",
             zIndex:         1,
-            height:         "72px",
+            height:         { xs: "64px", md: "100px" },
             display:        "flex",
             alignItems:     "center",
             justifyContent: "space-between",
-            px:             { xs: 2, md: 4 },
+            // Tighter padding on mobile, generous on desktop
+            px:             { xs: 2, sm: 3, md: 5 },
           }}
         >
           {/* Left: hamburger + wordmark */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 2, md: 5 } }}>
             <IconButton
               onClick={() => setDrawerOpen(true)}
               aria-label="open navigation"
               size="small"
               sx={{
-                color:  COLORS.textSecondary,
-                border: `1px solid ${COLORS.border}`,
+                color:        COLORS.textSecondary,
+                border:       `1px solid ${COLORS.border}`,
                 borderRadius: "3px",
-                p: "5px",
-                "&:hover": { color: COLORS.white, borderColor: COLORS.borderLight },
+                // Larger touch target on mobile
+                p:            { xs: "7px", md: "6px" },
+                "&:hover":    { color: COLORS.white, borderColor: COLORS.borderLight },
               }}
             >
-              <MenuIcon fontSize="small" />
+              <MenuIcon sx={{ fontSize: { xs: "1.1rem", md: "1.25rem" } }} />
             </IconButton>
 
             <MuiLink
@@ -98,13 +111,16 @@ export default function Layout({ children }: LayoutProps) {
               underline="none"
               sx={{
                 color:         COLORS.white,
-                letterSpacing: "0.18em",
+                letterSpacing: "0.22em",
                 textTransform: "uppercase",
                 fontFamily:    '"Georgia", serif',
-                fontSize:      "0.9rem",
+                // Responsive wordmark — smaller on mobile to avoid overflow
+                fontSize:      { xs: "1.05rem", sm: "1.35rem", md: "2.05rem" },
                 opacity:       0.9,
                 "&:hover":     { opacity: 1 },
                 transition:    "opacity 0.2s ease",
+                // Prevent wrapping
+                whiteSpace:    "nowrap",
               }}
             >
               MisterMoon
@@ -112,7 +128,7 @@ export default function Layout({ children }: LayoutProps) {
           </Box>
 
           {/* Right: social icons */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.25, md: 0.75 } }}>
             {SOCIAL_LINKS.map(({ icon, href, label }) => (
               <IconButton
                 key={label}
@@ -121,9 +137,10 @@ export default function Layout({ children }: LayoutProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                size="small"
                 sx={{
                   color:     COLORS.textMuted,
+                  // Touch-friendly padding on mobile
+                  p:         { xs: "6px", md: "8px" },
                   "&:hover": { color: COLORS.white },
                 }}
               >
@@ -140,14 +157,20 @@ export default function Layout({ children }: LayoutProps) {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         ModalProps={{ keepMounted: true }}
+        // Full-width on small phones, 260px on larger screens
+        PaperProps={{
+          sx: {
+            width:           { xs: "80vw", sm: "260px" },
+            maxWidth:        "320px",
+            backgroundColor: COLORS.surface,
+          },
+        }}
       >
         <Box
           sx={{
-            width:          260,
-            height:         "100%",
-            display:        "flex",
-            flexDirection:  "column",
-            backgroundColor:COLORS.surface,
+            height:        "100%",
+            display:       "flex",
+            flexDirection: "column",
           }}
           role="navigation"
           aria-label="Site navigation"
@@ -158,17 +181,17 @@ export default function Layout({ children }: LayoutProps) {
               display:        "flex",
               alignItems:     "center",
               justifyContent: "space-between",
-              px: 2.5,
-              py: 2,
+              px:             2.5,
+              py:             2.5,
               borderBottom:   `1px solid ${COLORS.border}`,
             }}
           >
             <Typography
               sx={{
                 fontFamily:    '"Georgia", serif',
-                letterSpacing: "0.18em",
+                letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                fontSize:      "0.78rem",
+                fontSize:      "0.82rem",
                 color:         COLORS.gold,
               }}
             >
@@ -176,11 +199,14 @@ export default function Layout({ children }: LayoutProps) {
             </Typography>
             <IconButton
               onClick={() => setDrawerOpen(false)}
-              size="small"
               aria-label="close navigation"
-              sx={{ color: COLORS.textMuted, "&:hover": { color: COLORS.white } }}
+              sx={{
+                color:     COLORS.textMuted,
+                p:         "8px", // larger touch target
+                "&:hover": { color: COLORS.white },
+              }}
             >
-              <CloseIcon fontSize="small" />
+              <CloseIcon sx={{ fontSize: "1.1rem" }} />
             </IconButton>
           </Box>
 
@@ -196,12 +222,12 @@ export default function Layout({ children }: LayoutProps) {
                   selected={isActive}
                   onClick={() => setDrawerOpen(false)}
                   sx={{
-                    py: 1.2,
-                    borderLeft: isActive
+                    py:           { xs: 1.6, md: 1.3 }, // taller rows on mobile
+                    borderLeft:   isActive
                       ? `2px solid ${COLORS.gold}`
                       : "2px solid transparent",
                     borderRadius: "0 2px 2px 0",
-                    transition: "border-color 0.2s, background-color 0.2s",
+                    transition:   "border-color 0.2s, background-color 0.2s",
                   }}
                 >
                   <ListItemText
@@ -210,7 +236,7 @@ export default function Layout({ children }: LayoutProps) {
                       sx: {
                         color:         isActive ? COLORS.gold : COLORS.textSecondary,
                         fontFamily:    '"Georgia", serif',
-                        fontSize:      "0.8rem",
+                        fontSize:      { xs: "0.85rem", md: "0.8rem" },
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
                         transition:    "color 0.2s",
@@ -222,14 +248,14 @@ export default function Layout({ children }: LayoutProps) {
             })}
           </List>
 
-          {/* Social links at bottom of drawer */}
+          {/* Social icons at drawer bottom */}
           <Divider sx={{ borderColor: COLORS.border }} />
           <Box
             sx={{
               display:        "flex",
               justifyContent: "center",
-              gap:            1,
-              py:             2,
+              gap:            { xs: 1.5, md: 1 },
+              py:             { xs: 3, md: 2.5 },
             }}
           >
             {SOCIAL_LINKS.map(({ icon, href, label }) => (
@@ -240,9 +266,9 @@ export default function Layout({ children }: LayoutProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                size="small"
                 sx={{
                   color:     COLORS.textMuted,
+                  p:         "8px",
                   "&:hover": { color: COLORS.white },
                 }}
               >
@@ -260,6 +286,7 @@ export default function Layout({ children }: LayoutProps) {
           position:  "relative",
           zIndex:    1,
           width:     "100vw",
+          // Prevent content from causing horizontal scroll on any device
           overflowX: "hidden",
         }}
       >
