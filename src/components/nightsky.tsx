@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, } from "react";
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -164,7 +165,7 @@ const STATIC_COUNT  = 400;
 const SPAWN_CHANCE  = 0.004; // probability per frame of a new shooting star
 const BG_COLOR      = "rgb(8, 8, 14)";
 
-export default function NightSky(): JSX.Element {
+export default function NightSky() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
