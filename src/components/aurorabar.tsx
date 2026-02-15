@@ -2,15 +2,12 @@ import { useEffect, useRef } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type AuroraPoint = {
-  x: number;
-  y: number;
-};
+type AuroraPoint = { x: number; y: number };
 
 type Gap = {
-  start:   number; // index into points array where gap begins
-  end:     number; // index into points array where gap ends (exclusive)
-  fadeLen: number; // number of points on each edge that fade in/out
+  start:   number;
+  end:     number;
+  fadeLen: number;
 };
 
 type AuroraLayer = {
@@ -19,23 +16,24 @@ type AuroraLayer = {
   gaps:     Gap[];
 };
 
+// x-range claimed by a loop — shared across all layers
+type LoopZone = { xStart: number; xEnd: number };
+
+type BaselinePhase = "forward" | "back" | "return";
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const CANVAS_HEIGHT   = 200;
+const CANVAS_HEIGHT  = 200;
+const Y_PAD_TOP      = CANVAS_HEIGHT * 0.10;
+const Y_PAD_BOTTOM   = CANVAS_HEIGHT * 0.80;
+const BOTTOM_FADE_START = CANVAS_HEIGHT * 0.55;
+const BOTTOM_FADE_END   = CANVAS_HEIGHT * 0.82;
+const GAP_FADE_LEN   = 50;
+const GAP_MIN_LEN    = 100;
+const GAP_MAX_COVER  = 0.5;
 
-// Vertical padding: baseline y is clamped to this band.
-// Keeps aurora off the very top and bottom edges of the bar.
-const Y_PAD_TOP    = CANVAS_HEIGHT * 0.10; 
-const Y_PAD_BOTTOM = CANVAS_HEIGHT * 0.80;   
-
-// Bottom fade: alpha is multiplied by 0 as p.y approaches BOTTOM_FADE_START
-const BOTTOM_FADE_START = CANVAS_HEIGHT * 0.55; // fade begins here
-const BOTTOM_FADE_END   = CANVAS_HEIGHT * 0.82; // fully transparent here
-
-// Gap config
-const GAP_FADE_LEN  = 50;  // points on each gap edge that transition
-const GAP_MIN_LEN   = 100; // shortest permissible gap
-const GAP_MAX_COVER = 0.5; // max fraction of a layer's points that can be gaps
+// Minimum horizontal gap between any two loops across all layers
+const LOOP_EXCLUSION_BUFFER = 180;
 
 const AURORA_COLORS = [
   "rgba(0,255,180,0.03)",
@@ -46,35 +44,25 @@ const AURORA_COLORS = [
 
 // ─── Gap helpers ──────────────────────────────────────────────────────────────
 
-/**
- * Generate between 1 and 5 non-overlapping gaps for a layer,
- * capped so their total length never exceeds GAP_MAX_COVER * totalPoints.
- */
 function generateGaps(totalPoints: number): Gap[] {
-  const gaps: Gap[]    = [];
-  const maxGapCount    = 1 + Math.floor(Math.random() * 5); // 1–5
-  const maxCovered     = Math.floor(totalPoints * GAP_MAX_COVER);
-  let   totalCovered   = 0;
+  const gaps: Gap[]  = [];
+  const maxGapCount  = 1 + Math.floor(Math.random() * 5);
+  const maxCovered   = Math.floor(totalPoints * GAP_MAX_COVER);
+  let   totalCovered = 0;
 
   for (let attempt = 0; attempt < maxGapCount; attempt++) {
     const remaining = maxCovered - totalCovered;
     if (remaining < GAP_MIN_LEN) break;
 
-    // Cap individual gap length to avoid consuming the entire budget at once
     const maxLen = Math.min(remaining, Math.floor(totalPoints * 0.28));
     const len    = GAP_MIN_LEN + Math.floor(Math.random() * Math.max(1, maxLen - GAP_MIN_LEN));
 
-    // Try up to 12 random placements that don't overlap existing gaps
     let placed = false;
     for (let t = 0; t < 12; t++) {
-      const start = Math.floor(Math.random() * (totalPoints - len));
-      const end   = start + len;
-
-      // Buffer zone around each existing gap to avoid fade-zone collisions
-      const buffer  = GAP_FADE_LEN * 2;
-      const overlaps = gaps.some(
-        (g) => start < g.end + buffer && end > g.start - buffer,
-      );
+      const start  = Math.floor(Math.random() * (totalPoints - len));
+      const end    = start + len;
+      const buffer = GAP_FADE_LEN * 2;
+      const overlaps = gaps.some(g => start < g.end + buffer && end > g.start - buffer);
 
       if (!overlaps) {
         gaps.push({ start, end, fadeLen: GAP_FADE_LEN });
@@ -85,110 +73,148 @@ function generateGaps(totalPoints: number): Gap[] {
     }
     if (!placed) break;
   }
-
   return gaps;
 }
 
-/**
- * Returns a 0–1 multiplier for a point at index `i` based on its
- * relationship to all gaps in the layer:
- *   - Core of gap         → 0
- *   - Fade-in edge        → linear 1→0
- *   - Fade-out edge       → linear 0→1
- *   - Outside all gaps    → 1
- */
 function gapAlpha(i: number, gaps: Gap[]): number {
   for (const gap of gaps) {
     if (i < gap.start || i >= gap.end) continue;
-
     const fromStart = i - gap.start;
     const fromEnd   = gap.end - 1 - i;
-
-    // Fade-in zone (entering the gap from the left)
-    if (fromStart < gap.fadeLen) {
-      return 1 - fromStart / gap.fadeLen;
-    }
-    // Fade-out zone (leaving the gap to the right)
-    if (fromEnd < gap.fadeLen) {
-      return 1 - fromEnd / gap.fadeLen;
-    }
-    // Core of gap
+    if (fromStart < gap.fadeLen) return 1 - fromStart / gap.fadeLen;
+    if (fromEnd   < gap.fadeLen) return 1 - fromEnd   / gap.fadeLen;
     return 0;
   }
   return 1;
 }
 
-// ─── Baseline & layer generation ─────────────────────────────────────────────
+// ─── Baseline generation with shared loop-zone exclusion ─────────────────────
 
-function generateBaseLine(width: number): AuroraPoint[] {
+function generateBaseLine(
+  width:          number,
+  forbiddenZones: LoopZone[],
+  outZones:       LoopZone[],
+): AuroraPoint[] {
   const points: AuroraPoint[] = [];
-  let x = 0;
-  let y = Y_PAD_TOP + Math.random() * (Y_PAD_BOTTOM - Y_PAD_TOP);
 
-  while (x <= width) {
-    y += (Math.random() - 0.5) * 10;
-    // Clamp y to the padded band
-    y  = Math.max(Y_PAD_TOP, Math.min(Y_PAD_BOTTOM, y));
+  let x     = 0;
+  let y     = Y_PAD_TOP + Math.random() * (Y_PAD_BOTTOM - Y_PAD_TOP);
+  let phase: BaselinePhase = "forward";
+  let loopStartX  = 0;
+  let loopDepth   = 0;
+  let loopTargetY = y;
 
+  const maxPoints = width * 4;
+
+  while (x <= width && points.length < maxPoints) {
+    y = Math.max(Y_PAD_TOP, Math.min(Y_PAD_BOTTOM, y));
     points.push({ x, y });
 
-    x += 1;
-    // Occasional slight backward jitter produces the organic feel of the original
-    if (Math.random() < 0.02) x -= Math.random() * 5;
+    switch (phase) {
+      case "forward": {
+        y += (Math.random() - 0.5) * 10;
+        const jitter = Math.random() < 0.02 ? -(Math.random() * 5) : 0;
+        x += 1 + jitter;
+
+        if (Math.random() < 0.0025 && x > 80 && x < width * 0.85) {
+          const tentativeDepth = 60 + Math.random() * Math.min(260, x - 60);
+          const tentativeStart = x - tentativeDepth;
+          const allZones = [...forbiddenZones, ...outZones];
+          const isTaken  = allZones.some(
+            z => tentativeStart - LOOP_EXCLUSION_BUFFER < z.xEnd &&
+                 x              + LOOP_EXCLUSION_BUFFER > z.xStart,
+          );
+
+          if (!isTaken) {
+            phase      = "back";
+            loopStartX = x;
+            loopDepth  = tentativeDepth;
+            outZones.push({ xStart: tentativeStart, xEnd: x });
+
+            const shift = (15 + Math.random() * 55) * (Math.random() < 0.5 ? 1 : -1);
+            loopTargetY = Math.max(Y_PAD_TOP, Math.min(Y_PAD_BOTTOM, y + shift));
+          }
+        }
+        break;
+      }
+
+      case "back": {
+        y += (loopTargetY - y) * 0.035 + (Math.random() - 0.5) * 7;
+        x -= 1 + Math.random() * 0.8;
+
+        if (x <= loopStartX - loopDepth) {
+          phase = "return";
+          if (Math.random() < 0.25) {
+            const innerDepth  = 30 + Math.random() * 60;
+            const allZones    = [...forbiddenZones, ...outZones];
+            const innerTaken  = allZones.some(
+              z => (x - innerDepth) - LOOP_EXCLUSION_BUFFER < z.xEnd &&
+                   x               + LOOP_EXCLUSION_BUFFER > z.xStart,
+            );
+            if (!innerTaken) {
+              outZones.push({ xStart: x - innerDepth, xEnd: x });
+              loopDepth  = innerDepth;
+              loopStartX = x;
+              const shift = (10 + Math.random() * 30) * (Math.random() < 0.5 ? 1 : -1);
+              loopTargetY = Math.max(Y_PAD_TOP, Math.min(Y_PAD_BOTTOM, y + shift));
+              phase = "back";
+            }
+          }
+        }
+        break;
+      }
+
+      case "return": {
+        y += (Math.random() - 0.5) * 10;
+        x += 1 + Math.random() * 0.5;
+        if (x >= loopStartX) phase = "forward";
+        break;
+      }
+    }
   }
 
   return points;
 }
 
-function generateLayer(color: string, width: number): AuroraLayer {
-  const baseLine = generateBaseLine(width);
-  return {
-    color,
-    baseLine,
-    gaps: generateGaps(baseLine.length),
-  };
+// ─── Layer collection ─────────────────────────────────────────────────────────
+
+function generateAllLayers(width: number): AuroraLayer[] {
+  const allLoopZones: LoopZone[] = [];
+
+  return AURORA_COLORS.map((color) => {
+    const newZones: LoopZone[] = [];
+    const baseLine = generateBaseLine(width, allLoopZones, newZones);
+    allLoopZones.push(...newZones);
+    return { color, baseLine, gaps: generateGaps(baseLine.length) };
+  });
 }
 
 // ─── Draw ─────────────────────────────────────────────────────────────────────
 
-function drawLightLine(
-  ctx:     CanvasRenderingContext2D,
-  layer:   AuroraLayer,
-  width:   number,
-): void {
+function drawLightLine(ctx: CanvasRenderingContext2D, layer: AuroraLayer, width: number): void {
   const { color, baseLine, gaps } = layer;
   const fadeWidth = 1000;
 
   baseLine.forEach((p, i) => {
-    // 1. Horizontal edge fade (original behaviour)
     let edgeFade = 1;
-    if (p.x < fadeWidth)             edgeFade = p.x / fadeWidth;
-    if (p.x > width - fadeWidth)     edgeFade = (width - p.x) / fadeWidth;
+    if (p.x < fadeWidth)         edgeFade = p.x / fadeWidth;
+    if (p.x > width - fadeWidth) edgeFade = (width - p.x) / fadeWidth;
     edgeFade = Math.max(0, Math.min(1, edgeFade));
 
-    // 2. Bottom fade: points whose baseline sits low in the bar fade to transparent
     let bottomFade = 1;
     if (p.y >= BOTTOM_FADE_START) {
-      bottomFade = Math.max(
-        0,
-        1 - (p.y - BOTTOM_FADE_START) / (BOTTOM_FADE_END - BOTTOM_FADE_START),
-      );
+      bottomFade = Math.max(0, 1 - (p.y - BOTTOM_FADE_START) / (BOTTOM_FADE_END - BOTTOM_FADE_START));
     }
 
-    // 3. Gap multiplier
-    const gapFade = gapAlpha(i, gaps);
-
-    // Combined alpha for this point's light column
-    const combinedFade = edgeFade * bottomFade * gapFade;
-    if (combinedFade <= 0) return; // skip invisible points entirely
+    const combinedFade = edgeFade * bottomFade * gapAlpha(i, gaps);
+    if (combinedFade <= 0) return;
 
     const bloomWidth = 3 + Math.random() * 3;
     const alpha      = (0.05 + Math.random() * 0.15) * combinedFade;
+    const maxHeight  = p.y * (0.4 + Math.random() * 0.8);
+    const topY       = Math.max(p.y - maxHeight, -100);
 
-    const maxHeight = p.y * (0.4 + Math.random() * 0.8);
-    const topY      = Math.max(p.y - maxHeight, -100);
-
-    const gradient  = ctx.createLinearGradient(p.x, p.y, p.x, topY);
+    const gradient   = ctx.createLinearGradient(p.x, p.y, p.x, topY);
     gradient.addColorStop(0, color.replace(/[\d.]+\)$/g, `${alpha})`));
     gradient.addColorStop(1, "rgba(0,0,0,0)");
 
@@ -197,11 +223,7 @@ function drawLightLine(
   });
 }
 
-function drawAll(
-  ctx:    CanvasRenderingContext2D,
-  layers: AuroraLayer[],
-  width:  number,
-): void {
+function drawAll(ctx: CanvasRenderingContext2D, layers: AuroraLayer[], width: number): void {
   ctx.clearRect(0, 0, width, CANVAS_HEIGHT);
   for (const layer of layers) drawLightLine(ctx, layer, width);
 }
@@ -214,9 +236,8 @@ export default function AuroraBar() {
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx    = canvas.getContext("2d")!;
-
-    let width    = window.innerWidth;
     const dpr    = window.devicePixelRatio || 1;
+    let width    = window.innerWidth;
 
     const applySize = () => {
       canvas.width        = width * dpr;
@@ -228,20 +249,13 @@ export default function AuroraBar() {
     };
 
     applySize();
-
-    // Generate all layers once
-    const layers: AuroraLayer[] = AURORA_COLORS.map((c) => generateLayer(c, width));
-
-    // Draw once — static, no animation loop
+    let layers: AuroraLayer[] = generateAllLayers(width);
     drawAll(ctx, layers, width);
 
     const handleResize = () => {
       width = window.innerWidth;
       applySize();
-
-      // Regenerate geometry for new width, then redraw
-      layers.length = 0;
-      AURORA_COLORS.forEach((c) => layers.push(generateLayer(c, width)));
+      layers = generateAllLayers(width);
       drawAll(ctx, layers, width);
     };
 

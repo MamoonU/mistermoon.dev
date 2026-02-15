@@ -26,11 +26,16 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
+// ─── Navigation ───────────────────────────────────────────────────────────────
+//
+// "active" is determined by the start of the pathname so that
+// /projects/orion highlights the Projects entry, and
+// /constellations/orion highlights the Constellations entry.
+//
 const NAV_PAGES = [
-  { name: "Home",     path: "/" },
-  { name: "Projects", path: "/projects" },
-  { name: "Example1", path: "/example1" },
-  { name: "Example2", path: "/example2" },
+  { name: "Home",           path: "/",              match: (p: string) => p === "/"                  },
+  { name: "Projects",       path: "/projects",      match: (p: string) => p.startsWith("/projects")  },
+  { name: "Constellations", path: "/constellations", match: (p: string) => p.startsWith("/constellations") },
 ] as const;
 
 const SOCIAL_LINKS = [
@@ -50,6 +55,8 @@ const SOCIAL_LINKS = [
     label: "Instagram",
   },
 ] as const;
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Layout({ children }: LayoutProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -72,7 +79,6 @@ export default function Layout({ children }: LayoutProps) {
           borderBottom:    `1px solid ${COLORS.border}`,
         }}
       >
-        {/* Aurora decorative layer */}
         <AuroraBar />
 
         <Toolbar
@@ -83,7 +89,6 @@ export default function Layout({ children }: LayoutProps) {
             display:        "flex",
             alignItems:     "center",
             justifyContent: "space-between",
-            // Tighter padding on mobile, generous on desktop
             px:             { xs: 2, sm: 3, md: 5 },
           }}
         >
@@ -97,7 +102,6 @@ export default function Layout({ children }: LayoutProps) {
                 color:        COLORS.textSecondary,
                 border:       `1px solid ${COLORS.border}`,
                 borderRadius: "3px",
-                // Larger touch target on mobile
                 p:            { xs: "7px", md: "6px" },
                 "&:hover":    { color: COLORS.white, borderColor: COLORS.borderLight },
               }}
@@ -114,12 +118,10 @@ export default function Layout({ children }: LayoutProps) {
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
                 fontFamily:    '"Georgia", serif',
-                // Responsive wordmark — smaller on mobile to avoid overflow
                 fontSize:      { xs: "1.05rem", sm: "1.35rem", md: "2.05rem" },
                 opacity:       0.9,
                 "&:hover":     { opacity: 1 },
                 transition:    "opacity 0.2s ease",
-                // Prevent wrapping
                 whiteSpace:    "nowrap",
               }}
             >
@@ -139,7 +141,6 @@ export default function Layout({ children }: LayoutProps) {
                 aria-label={label}
                 sx={{
                   color:     COLORS.textMuted,
-                  // Touch-friendly padding on mobile
                   p:         { xs: "6px", md: "8px" },
                   "&:hover": { color: COLORS.white },
                 }}
@@ -157,7 +158,6 @@ export default function Layout({ children }: LayoutProps) {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         ModalProps={{ keepMounted: true }}
-        // Full-width on small phones, 260px on larger screens
         PaperProps={{
           sx: {
             width:           { xs: "80vw", sm: "260px" },
@@ -167,11 +167,7 @@ export default function Layout({ children }: LayoutProps) {
         }}
       >
         <Box
-          sx={{
-            height:        "100%",
-            display:       "flex",
-            flexDirection: "column",
-          }}
+          sx={{ height: "100%", display: "flex", flexDirection: "column" }}
           role="navigation"
           aria-label="Site navigation"
         >
@@ -200,11 +196,7 @@ export default function Layout({ children }: LayoutProps) {
             <IconButton
               onClick={() => setDrawerOpen(false)}
               aria-label="close navigation"
-              sx={{
-                color:     COLORS.textMuted,
-                p:         "8px", // larger touch target
-                "&:hover": { color: COLORS.white },
-              }}
+              sx={{ color: COLORS.textMuted, p: "8px", "&:hover": { color: COLORS.white } }}
             >
               <CloseIcon sx={{ fontSize: "1.1rem" }} />
             </IconButton>
@@ -213,7 +205,7 @@ export default function Layout({ children }: LayoutProps) {
           {/* Nav links */}
           <List sx={{ flex: 1, pt: 2, px: 1 }}>
             {NAV_PAGES.map((page) => {
-              const isActive = location.pathname === page.path;
+              const isActive = page.match(location.pathname);
               return (
                 <ListItemButton
                   key={page.name}
@@ -222,10 +214,8 @@ export default function Layout({ children }: LayoutProps) {
                   selected={isActive}
                   onClick={() => setDrawerOpen(false)}
                   sx={{
-                    py:           { xs: 1.6, md: 1.3 }, // taller rows on mobile
-                    borderLeft:   isActive
-                      ? `2px solid ${COLORS.gold}`
-                      : "2px solid transparent",
+                    py:           { xs: 1.6, md: 1.3 },
+                    borderLeft:   isActive ? `2px solid ${COLORS.gold}` : "2px solid transparent",
                     borderRadius: "0 2px 2px 0",
                     transition:   "border-color 0.2s, background-color 0.2s",
                   }}
@@ -266,11 +256,7 @@ export default function Layout({ children }: LayoutProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                sx={{
-                  color:     COLORS.textMuted,
-                  p:         "8px",
-                  "&:hover": { color: COLORS.white },
-                }}
+                sx={{ color: COLORS.textMuted, p: "8px", "&:hover": { color: COLORS.white } }}
               >
                 {icon}
               </IconButton>
@@ -282,13 +268,7 @@ export default function Layout({ children }: LayoutProps) {
       {/* ── Page content ──────────────────────────────────────────────────── */}
       <Box
         component="main"
-        sx={{
-          position:  "relative",
-          zIndex:    1,
-          width:     "100vw",
-          // Prevent content from causing horizontal scroll on any device
-          overflowX: "hidden",
-        }}
+        sx={{ position: "relative", zIndex: 1, width: "100vw", overflowX: "hidden" }}
       >
         {children}
       </Box>
