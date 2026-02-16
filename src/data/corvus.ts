@@ -18,11 +18,11 @@ const corvus: ConstellationData = {
 
   // ── Stars ──────────────────────────────────────────────────────────────────
   stars: [
-    { id: "a", x: 190, y: 580, label: "Gienah",  size: 27 },
-    { id: "b", x: 240, y: 245, label: "Kraz",    size: 27 },
-    { id: "c", x: 430, y: 290, label: "Alchiba", size: 27 },
-    { id: "d", x: 500, y: 560, label: "Minkar",  size: 27 },
-    { id: "e", x: 495, y: 680, label: "E",       size: 18 },
+    { id: "a", x: 190, y: 580, label: "Kraz",  size: 27 },
+    { id: "b", x: 240, y: 245, label: "Algorab",    size: 27 },
+    { id: "c", x: 430, y: 290, label: "Gienah", size: 27 },
+    { id: "d", x: 500, y: 560, label: "ε Corvi",  size: 27 },
+    { id: "e", x: 495, y: 680, label: "Alchiba",       size: 18 },
   ],
 
   // ── Lines ──────────────────────────────────────────────────────────────────
@@ -37,7 +37,7 @@ const corvus: ConstellationData = {
   constellationSections: [
     {
       id:          "gienah",
-      starId:      "a",
+      starId:      "c",
       title:       "Gienah",
       description: "The brightest star in Corvus, marking the crow's wing.",
       starData: {
@@ -50,12 +50,51 @@ const corvus: ConstellationData = {
     },
     {
       id:          "kraz",
-      starId:      "b",
+      starId:      "a",
       title:       "Kraz",
       description: "Also known as Beta Corvi, this giant star helps form the distinctive quadrilateral shape of the crow.",
       starData: {
         name:        "Kraz",
         designation: "β Corvi",
+        distance:    "140 light-years",
+        class:       "Yellow giant (G5 II)",
+        info:        "Kraz is the second-brightest star in Corvus. It is a yellow giant star, similar to what our Sun will become in several billion years, but significantly more massive and luminous.",
+      },
+    },
+    {
+      id:          "algorab",
+      starId:      "b",
+      title:       "Algorab",
+      description: "Also known as Beta Corvi, this giant star helps form the distinctive quadrilateral shape of the crow.",
+      starData: {
+        name:        "Algorab",
+        designation: "β Corvi",
+        distance:    "140 light-years",
+        class:       "Yellow giant (G5 II)",
+        info:        "Kraz is the second-brightest star in Corvus. It is a yellow giant star, similar to what our Sun will become in several billion years, but significantly more massive and luminous.",
+      },
+    },
+    {
+      id:          "alchiba",
+      starId:      "e",
+      title:       "Alchiba",
+      description: "Also known as Gamma Corvi, this star is the tail of the crow.",
+      starData: {
+        name:        "Alchiba",
+        designation: "β Corvi",
+        distance:    "140 light-years",
+        class:       "Yellow giant (G5 II)",
+        info:        "Kraz is the second-brightest star in Corvus. It is a yellow giant star, similar to what our Sun will become in several billion years, but significantly more massive and luminous.",
+      },
+    },
+    {
+      id:          "epsilon-corvi",
+      starId:      "d",
+      title:       "ε Corvi",
+      description: "Also known as Beta Corvi, this giant star helps form the distinctive quadrilateral shape of the crow.",
+      starData: {
+        name:        "ε Corvi",
+        designation: "ε Corvi",
         distance:    "140 light-years",
         class:       "Yellow giant (G5 II)",
         info:        "Kraz is the second-brightest star in Corvus. It is a yellow giant star, similar to what our Sun will become in several billion years, but significantly more massive and luminous.",
