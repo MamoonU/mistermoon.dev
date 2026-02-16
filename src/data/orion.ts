@@ -52,9 +52,10 @@ const orion: ConstellationData = {
   // ── Constellation view ─────────────────────────────────────────────────────
   constellationSections: [
     {
-      id:     "betelgeuse",
-      starId: "f",
-      title:  "Betelgeuse",
+      id:          "betelgeuse",
+      starId:      "f",
+      title:       "Betelgeuse",
+      description: "One of the largest stars visible to the naked eye, marking Orion's shoulder with a distinctive red-orange glow.",
       starData: {
         name:        "Betelgeuse",
         designation: "α Orionis",
@@ -68,9 +69,10 @@ const orion: ConstellationData = {
       },
     },
     {
-      id:     "rigel",
-      starId: "n",
-      title:  "Rigel",
+      id:          "rigel",
+      starId:      "n",
+      title:       "Rigel",
+      description: "Despite being labeled beta, Rigel is typically the brightest star in Orion, shining with an intense blue-white light.",
       starData: {
         name:        "Rigel",
         designation: "β Orionis",
@@ -83,9 +85,10 @@ const orion: ConstellationData = {
       },
     },
     {
-      id:     "belt",
-      starId: "k",
-      title:  "The Belt — Mintaka, Alnilam, Alnitak",
+      id:          "belt",
+      starId:      "k",
+      title:       "The Belt — Mintaka, Alnilam, Alnitak",
+      description: "Three of the most recognizable stars in the night sky, forming a near-perfect horizontal line that has guided travelers for millennia.",
       starData: {
         stars:     "Mintaka (δ), Alnilam (ε), Alnitak (ζ)",
         distances: "900 – 1,340 light-years",
@@ -95,9 +98,10 @@ const orion: ConstellationData = {
       },
     },
     {
-      id:     "bellatrix",
-      starId: "h",
-      title:  "Bellatrix",
+      id:          "bellatrix",
+      starId:      "h",
+      title:       "Bellatrix",
+      description: "The 'female warrior' marks Orion's right shoulder with its distinctive electric-blue tint.",
       starData: {
         name:        "Bellatrix",
         designation: "γ Orionis",
@@ -109,9 +113,10 @@ const orion: ConstellationData = {
       },
     },
     {
-      id:     "saiph",
-      starId: "m",
-      title:  "Saiph",
+      id:          "saiph",
+      starId:      "m",
+      title:       "Saiph",
+      description: "Marking Orion's knee, this blue supergiant appears dimmer than Rigel mostly due to dust absorption along its line of sight.",
       starData: {
         name:        "Saiph",
         designation: "κ Orionis",
@@ -124,9 +129,10 @@ const orion: ConstellationData = {
       },
     },
     {
-      id:     "meissa",
-      starId: "g",
-      title:  "Meissa",
+      id:          "meissa",
+      starId:      "g",
+      title:       "Meissa",
+      description: "The 'shining one' marks Orion's head and sits at the centre of a young open star cluster.",
       starData: {
         name:        "Meissa",
         designation: "λ Orionis",
@@ -136,15 +142,32 @@ const orion: ConstellationData = {
       },
     },
     {
-      id:     "random",
-      starId: "a",
-      title:  "Notable Stars",
+      id:          "notable",
+      starId:      ["a", "b", "c", "d", "e", "i", "o", "p", "q", "r", "s"],
+      title:       "Notable Stars",
+      description: "Additional stars that complete Orion's distinctive form, including the outlying members of the constellation.",
       starData: {
-        name:      "Orion Nebula",
-        designation: "Messier 42 (M42)",
-        distance:    "1,344 light-years",
-        size:        "24 light-years across",
-    }},
+        info: "Orion contains many other notable stars beyond its brightest members. These include the chi and nu Orionis stars forming the club, the pi Orionis stars extending toward the east, and mu Orionis in the hunter's arm. Each contributes to the distinctive shape that has made this constellation one of the most recognizable in the night sky.",
+      },
+      list: [
+        {
+          text: "χ² Orionis, χ¹ Orionis — The Club",
+          subtext: "Form the raised club in Orion's hand, visible in dark skies"
+        },
+        {
+          text: "ξ Orionis, ν Orionis — The Upper Arm",
+          subtext: "Part of the northern arm structure"
+        },
+        {
+          text: "μ Orionis — The Arm",
+          subtext: "Located in Orion's arm between the shoulder and belt"
+        },
+        {
+          text: "π¹-π⁶ Orionis — The Shield/Eastern Extension",
+          subtext: "A line of stars extending eastward, sometimes depicted as a shield or lion's hide"
+        },
+      ],
+    },
   ],
 
   // ── Project view ───────────────────────────────────────────────────────────

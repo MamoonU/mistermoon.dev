@@ -12,7 +12,8 @@ export default function ProjectsIndex() {
         maxWidth: "960px",
         mx:       "auto",
         px:       { xs: 3, sm: 4, md: 6 },
-        py:       { xs: 6, md: 10 },
+        pt:       { xs: "calc(64px + 24px)", md: "calc(100px + 40px)" },
+        pb:       { xs: 6, md: 10 },
         color:    COLORS.textPrimary,
       }}
     >

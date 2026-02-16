@@ -69,14 +69,14 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* ── App bar ───────────────────────────────────────────────────────── */}
       <AppBar
-        position="sticky"
+        position="absolute"
         elevation={0}
         sx={{
           height:          { xs: "64px", md: "100px" },
           justifyContent:  "center",
           backgroundColor: "transparent",
           backdropFilter:  "blur(6px)",
-          borderBottom:    `1px solid ${COLORS.border}`,
+          borderBottom:    "none",
         }}
       >
         <AuroraBar />

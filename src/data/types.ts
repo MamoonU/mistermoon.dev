@@ -16,9 +16,17 @@ export type StarLine = [number, number, number, number];
 // Using a flexible key-value map so each star can have its own field set.
 // Values may be strings or numbers.  Common fields: name, distance, class,
 // colour, temperature, info — but not enforced by the type.
+// All fields are optional to maximize customizability.
 //
 export interface StarData {
-  [field: string]: string | number;
+  [field: string]: string | number | undefined;
+}
+
+// ─── List items for constellation sections ───────────────────────────────────
+
+export interface StarListItem {
+  text:    string;
+  subtext?: string;  // optional text below each list item
 }
 
 // ─── Sections ─────────────────────────────────────────────────────────────────
@@ -31,10 +39,12 @@ export interface ProjectPaper {
 }
 
 export interface ConstellationSection {
-  id:      string;
-  starId?: string;    // which star's click navigates here
-  title:   string;    // displayed as section heading
-  starData: StarData;
+  id:          string;
+  starId?:     string | string[];    // which star(s) click navigates here - can be multiple
+  title:       string;               // displayed as section heading
+  description: string;               // paragraph text shown before the expand button
+  starData?:   StarData;            // optional - flexible star data shown in expanded view
+  list?:       StarListItem[];      // optional - list items with optional subtext
 }
 
 export interface ProjectSection {
@@ -62,15 +72,3 @@ export interface ConstellationData {
   // Project view — narrative sections about the software project
   projectSections: ProjectSection[];
 }
-
-
-
-
-
-
-
-
-
-
-
-

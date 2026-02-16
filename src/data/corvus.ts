@@ -36,60 +36,32 @@ const corvus: ConstellationData = {
   // ── Constellation view ─────────────────────────────────────────────────────
   constellationSections: [
     {
-      id:     "betelgeuse",
-      starId: "a",
-      title:  "Betelgeuse",
+      id:          "gienah",
+      starId:      "a",
+      title:       "Gienah",
+      description: "The brightest star in Corvus, marking the crow's wing.",
       starData: {
-        name:        "Betelgeuse",
-        designation: "α Orionis",
-        distance:    "700 light-years",
-        class:       "Red supergiant (M1–M2)",
-        colour:      "Deep orange-red",
-        temperature: "3,500 K",
-        luminosity:  "~100,000 × Sun",
-        info:        "One of the largest and most luminous stars visible to the naked eye. So enormous that if placed at the centre of our Solar System, its surface would engulf every planet out to Jupiter. It is a semi-regular variable star, pulsating in brightness on cycles of roughly 400 days. Betelgeuse is expected to end its life as a supernova within the next 100,000 years — cosmically imminent.",
+        name:        "Gienah",
+        designation: "γ Corvi",
+        distance:    "165 light-years",
+        class:       "Blue-white giant (B8 III)",
+        info:        "Gienah is the brightest star in the constellation Corvus. The name derives from the Arabic for 'wing'. It is a blue-white giant star that has exhausted the hydrogen in its core and is now fusing helium.",
       },
     },
     {
-      id:     "c-rigel",
-      starId: "o",
-      title:  "Rigel",
+      id:          "kraz",
+      starId:      "b",
+      title:       "Kraz",
+      description: "Also known as Beta Corvi, this giant star helps form the distinctive quadrilateral shape of the crow.",
       starData: {
-        name:        "Rigel",
-        designation: "β Orionis",
-        distance:    "860 light-years",
-        class:       "Blue supergiant (B8 Ia)",
-        colour:      "Blue-white",
-        temperature: "12,100 K",
-        luminosity:  "~120,000 × Sun",
-        info:        "Despite being labelled beta, Rigel is typically the brightest star in Orion. It anchors the hunter's left foot and is one of the most intrinsically luminous stars in the Milky Way. The contrast between Rigel's icy blue-white and Betelgeuse's warm amber is one of the most striking colour pairs in the winter sky, visible to the naked eye on any clear night.",
+        name:        "Kraz",
+        designation: "β Corvi",
+        distance:    "140 light-years",
+        class:       "Yellow giant (G5 II)",
+        info:        "Kraz is the second-brightest star in Corvus. It is a yellow giant star, similar to what our Sun will become in several billion years, but significantly more massive and luminous.",
       },
     },
-    {
-      id:     "c-belt",
-      starId: "l",
-      title:  "The Belt — Mintaka, Alnilam, Alnitak",
-      starData: {
-        stars:     "Mintaka (δ), Alnilam (ε), Alnitak (ζ)",
-        distances: "900 – 1,340 light-years",
-        class:     "O- and B-type supergiants",
-        alignment: "Nearly perfect 3° arc",
-        info:      "Three of the most recognisable stars in the night sky, forming a near-perfect horizontal line that has oriented sailors, priests, and pyramid-builders for millennia. The alignment is a coincidence of perspective — in three-dimensional space the three stars are nowhere near each other. Alnilam, the middle star, is the most luminous of the trio, radiating roughly 375,000 times the energy of our Sun.",
-      },
-    },
-    {
-      id:     "c-nebula",
-      starId: "g",
-      title:  "The Great Nebula — M42",
-      starData: {
-        name:      "Orion Nebula",
-        catalogue: "M42 / NGC 1976",
-        distance:  "1,344 light-years",
-        diameter:  "24 light-years",
-        class:     "Diffuse emission nebula",
-        info:      "Visible to the naked eye as a fuzzy patch below the belt, M42 is one of the most scrutinised objects in the sky. Within its glowing clouds, protostars are collapsing under gravity and igniting nuclear fusion for the very first time. The Trapezium cluster at its heart provides the ultraviolet radiation that excites the surrounding hydrogen into a luminous pink-violet haze. Long-exposure photography reveals dramatic pillars of dust inside which new solar systems are assembling even now.",
-      },
-    },],
+  ],
 
   // ── Project view ───────────────────────────────────────────────────────────
   projectSections: [
@@ -98,4 +70,3 @@ const corvus: ConstellationData = {
 };
 
     export default corvus;
-

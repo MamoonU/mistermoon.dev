@@ -55,7 +55,8 @@ export default function Home() {
         maxWidth: "960px",
         mx:       "auto",
         px:       { xs: 3, sm: 4, md: 6 },
-        py:       { xs: 6, md: 10 },
+        pt:       { xs: "calc(64px + 24px)", md: "calc(100px + 40px)" }, // AppBar height + padding
+        pb:       { xs: 6, md: 10 },
         color:    COLORS.textPrimary,
       }}
     >
@@ -91,7 +92,7 @@ export default function Home() {
         </MuiLink>
       </Box>
 
-      <Typography variant="caption" sx={{ display: "block", mb: { xs: 3, md: 5 } }}>
+      <Typography variant="caption" sx={{ display: "block", mb: { xs: 2, md: 3 } }}>
         Click a title to explore that project
       </Typography>
 
@@ -105,7 +106,7 @@ export default function Home() {
               flexDirection: { xs: "column", sm: "row" },
               alignItems:    { xs: "flex-start", sm: "baseline" },
               gap:           { xs: 0.5, sm: 2.5 },
-              mb:            { xs: 2.5, md: 3 },
+              mb:            { xs: 2, md: 2.5 },
               borderLeft:    `2px solid ${COLORS.border}`,
               pl:            2.5,
               transition:    "border-color 0.2s",
@@ -170,7 +171,7 @@ export default function Home() {
         </Typography>
       </Box>
 
-      <Typography variant="caption" sx={{ display: "block", mb: { xs: 3, md: 5 } }}>
+      <Typography variant="caption" sx={{ display: "block", mb: { xs: 2, md: 3 } }}>
         Click View to read inline
       </Typography>
 
@@ -212,7 +213,7 @@ export default function Home() {
         </MuiLink>
       </Box>
 
-      <Typography variant="caption" sx={{ display: "block", mb: { xs: 3, md: 5 } }}>
+      <Typography variant="caption" sx={{ display: "block", mb: { xs: 2, md: 3 } }}>
         Star maps, mythology, and the science behind each constellation
       </Typography>
 
@@ -226,7 +227,7 @@ export default function Home() {
               flexDirection: { xs: "column", sm: "row" },
               alignItems:    { xs: "flex-start", sm: "baseline" },
               gap:           { xs: 0.5, sm: 2.5 },
-              mb:            { xs: 2.5, md: 3 },
+              mb:            { xs: 2, md: 2.5 },
               borderLeft:    `2px solid ${COLORS.border}`,
               pl:            2.5,
               transition:    "border-color 0.2s",
