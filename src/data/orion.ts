@@ -2,12 +2,6 @@ import type { ConstellationData } from "./types";
 
 // ─── Orion ────────────────────────────────────────────────────────────────────
 
-// Star IDs and rough correspondences:
-// a → 
-// b →
-// c → 
-// d → Phi-2 Orionis (171, 189)
-
 const orion: ConstellationData = {
   id:          "orion",
   name:        "Orion",
@@ -85,10 +79,36 @@ const orion: ConstellationData = {
       },
     },
     {
-      id:          "belt",
-      starId:      "k",
-      title:       "The Belt — Mintaka, Alnilam, Alnitak",
+      id:          "alnitak",
+      starId:      "j",
+      title:       "Alnitak",
       description: "Three of the most recognizable stars in the night sky, forming a near-perfect horizontal line that has guided travelers for millennia.",
+      starData: {
+        stars:     "Mintaka (δ), Alnilam (ε), Alnitak (ζ)",
+        distances: "900 – 1,340 light-years",
+        class:     "O- and B-type supergiants",
+        alignment: "Nearly perfect 3° arc",
+        info:      "Three of the most recognisable stars in the night sky, forming a near-perfect horizontal line that has oriented sailors, priests, and pyramid-builders for millennia. The alignment is a coincidence of perspective — in three-dimensional space the three stars are nowhere near each other. Alnilam, the middle star, is the most luminous of the trio, radiating roughly 375,000 times the energy of our Sun.",
+      },
+    },
+    {
+      id:          "Alnilam",
+      starId:      "k",
+      title:       "Alnilam",
+      description: "The middle star of Orion's belt, shining with a brilliant blue-white light.",
+      starData: {
+        stars:     "Mintaka (δ), Alnilam (ε), Alnitak (ζ)",
+        distances: "900 – 1,340 light-years",
+        class:     "O- and B-type supergiants",
+        alignment: "Nearly perfect 3° arc",
+        info:      "Three of the most recognisable stars in the night sky, forming a near-perfect horizontal line that has oriented sailors, priests, and pyramid-builders for millennia. The alignment is a coincidence of perspective — in three-dimensional space the three stars are nowhere near each other. Alnilam, the middle star, is the most luminous of the trio, radiating roughly 375,000 times the energy of our Sun.",
+      },
+    },
+    {
+      id:          "Mintaka",
+      starId:      "l",
+      title:       "Mintaka",
+      description: "The leftmost star of Orion's belt, shining with a brilliant blue-white light.",
       starData: {
         stars:     "Mintaka (δ), Alnilam (ε), Alnitak (ζ)",
         distances: "900 – 1,340 light-years",

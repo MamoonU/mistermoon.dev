@@ -1,0 +1,28 @@
+  {
+  "id":          "orion",
+  "name":        "Orion",
+  "description": "The Hunter",
+  "hasProject":  true,
+  
+  "stars": [
+    { "id": "a", "x": 180, "y":  72, "label": "χ2 Orionis", "size": 18 },
+    { "id": "b", "x": 252, "y":  54, "label": "χ1 Orionis", "size": 18 },
+    { "id": "c", "x": 144, "y": 198, "label": "ξ Orionis",  "size": 18 },
+    { "id": "d", "x": 171, "y": 189, "label": "ν Orionis",  "size": 18 },
+    { "id": "e", "x": 198, "y": 306, "label": "μ Orionis",  "size": 18 },
+    { "id": "f", "x": 252, "y": 360, "label": "Betelgeuse", "size": 45 },
+    { "id": "g", "x": 360, "y": 306, "label": "Meissa",     "size": 27 },
+    { "id": "h", "x": 450, "y": 378, "label": "Bellatrix",  "size": 36 },
+    { "id": "i", "x": 666, "y": 369, "label": "π3 Orionis", "size": 27 },
+    { "id": "j", "x": 324, "y": 612, "label": "Alnitak",    "size": 36 },
+    { "id": "k", "x": 360, "y": 594, "label": "Alnilam",    "size": 36 },
+    { "id": "l", "x": 396, "y": 567, "label": "Mintaka",    "size": 36 },
+    { "id": "m", "x": 279, "y": 756, "label": "Saiph",      "size": 27 },
+    { "id": "n", "x": 486, "y": 729, "label": "Rigel",      "size": 45 },
+    { "id": "o", "x": 657, "y": 315, "label": "π2 Orionis", "size": 18 },
+    { "id": "p", "x": 630, "y": 279, "label": "π1 Orionis", "size": 18 },
+    { "id": "q", "x": 657, "y": 405, "label": "π4 Orionis", "size": 18 },
+    { "id": "r", "x": 648, "y": 468, "label": "π5 Orionis", "size": 18 },
+    { "id": "s", "x": 621, "y": 486, "label": "π6 Orionis", "size": 18 }
+  ]
+}

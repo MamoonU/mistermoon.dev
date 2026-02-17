@@ -1,0 +1,15 @@
+{
+  "id": "cassiopeia",
+  "name": "Cassiopeia",
+  "description": "The Queen",
+  "hasProject": false,
+  "stars": [
+    { "id": "a", "label": "Schedar", "size": 36 },
+    { "id": "b", "label": "Caph",    "size": 27 },
+    { "id": "c", "label": "Castula",   "size": 18 },
+    { "id": "d", "label": "Ruchbah", "size": 18 },
+    { "id": "e", "label": "Segin",   "size": 18 },
+    { "id": "f", "label": "Achird",  "size": 18 },
+    { "id": "g", "label": "Fulu",    "size": 18 }
+  ]
+}

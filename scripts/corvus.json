@@ -1,0 +1,13 @@
+  {
+  "id":          "corvus",
+  "name":        "Corvus",
+  "description": "The Crow",
+  "hasProject":  false,
+  "stars": [
+    { "id": "a", "x": 190, "y": 580, "label": "Kraz",  "size": 27 },
+    { "id": "b", "x": 240, "y": 245, "label": "Algorab",    "size": 27 },
+    { "id": "c", "x": 430, "y": 290, "label": "Gienah", "size": 27 },
+    { "id": "d", "x": 500, "y": 560, "label": "ε Corvi",  "size": 27 },
+    { "id": "e", "x": 495, "y": 680, "label": "Alchiba",       "size": 18 }
+  ]
+}

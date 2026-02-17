@@ -123,25 +123,13 @@ export default function StarSectionRow({ section, isOpen, onToggle }: StarSectio
           "&:hover":      { borderLeftColor: COLORS.gold },
         }}
       >
-        {/* Title */}
-        <Typography
-          sx={{
-            fontFamily:    '"Georgia", serif',
-            fontSize:      { xs: "0.9rem", md: "0.95rem" },
-            letterSpacing: "0.06em",
-            color:         COLORS.textPrimary,
-            fontWeight:    500,
-          }}
-        >
-          {section.title}
-        </Typography>
-
         {/* Description */}
         <Typography
           sx={{
             fontSize:   { xs: "0.8rem", md: "0.83rem" },
             color:      COLORS.textMuted,
             lineHeight: 1.7,
+            mb:         2,
           }}
         >
           {section.description}
